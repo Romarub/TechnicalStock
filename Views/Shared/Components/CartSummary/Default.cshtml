@@ -1,0 +1,26 @@
+﻿@model Cart
+    <div class="">
+        @if (Model.Lines.Count() > 0)
+        {
+        <small class="navbar-text">
+            <b>В корзине:</b>
+            @{
+                int qty = Model.Lines.Sum(x => x.Quantity);
+                @:@qty
+                if (qty == 1)
+                {
+                    @:позиция
+                }
+                else if (qty > 1 && qty < 5)
+                {
+                    @: позиции
+                }
+                else
+                {
+                    @: позиций
+                }
+            }
+        </small>
+        }
+        <a href="~/Cart/CartIndex" style="color:white; font-size:30px"><i class="fa fa-shopping-cart"></i></a>
+    </div>

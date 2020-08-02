@@ -1,0 +1,28 @@
+﻿<h2>Форма поступления новых деталей</h2>
+<form method="post" action="~/Home/Create">
+    <label for="name">Название детали</label><br />
+    <input type="text" id="name" name="name" required /><br />
+    <div>
+        <label for="description"> </label>
+    </div>
+    <textarea id="description" name="description" rows="5" cols="33" placeholder="Описание детали"></textarea><br />
+    <label for="quantity">Количество</label><br />
+    <input type="number" id="quantity" name="quantity" size="5" required min="1"/><br />
+    <label for="simulator">Тренажер</label><br />
+
+    <input type="checkbox" id="A321" name="simulator" value="A321" />
+    <label for="A321">A321</label><br />
+
+    <input type="checkbox" id="A322" name="simulator" value="A322" />
+    <label for="A322">A322</label><br />
+
+    <input type="checkbox" id="B737" name="simulator" value="B737" />
+    <label for="B737">B737</label><br />
+
+    <input type="checkbox" id="E170" name="simulator" value="E170" />
+    <label for="E170">E170</label><br />
+    <input type="submit" value="Отправить" />
+</form>
+
+@* //TODO: Попробовать изменить тип поля Simulator в модели на List или что-то еще, чтобы можно было указать 
+    несколько тренажеров в поле Simulator*@

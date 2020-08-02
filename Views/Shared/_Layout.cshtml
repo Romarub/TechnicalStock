@@ -1,0 +1,25 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="bg-primary text-white p-2">
+        <span class="navbar-brand ml-2"><a href="~/Home" style="color:white">Склад</a></span>
+        <span class="navbar-brand ml-2"><a href="~/Home/Create" style="color:white">Добавить деталь</a></span>
+        <span style="float:right; margin-right:20px;">
+        <vc:cart-summary />
+        </span>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>
+ 

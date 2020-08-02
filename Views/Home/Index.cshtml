@@ -1,0 +1,48 @@
+﻿@model IQueryable<SparePart>
+
+<link href="~/lib/tablesort-gh-pages/tablesort.css" rel="stylesheet"/>
+<table id="selectedColumn" class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">Номер по складу №</th>
+            <th scope="col">Название детали</th>
+            <th scope="col">Описание</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Тренажер</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var spare in Model)
+        {
+            <tr>
+                <td>@spare.SparePartId</td>
+                <td>@spare.Name</td>
+                <td>@spare.Description</td>
+                <td>@spare.Quantity</td>
+                <td>@spare.Simulator</td>
+                <td>
+                    <form action="~/Home/Details/@spare.SparePartId" target="_parent">
+                        <button type="submit">Подробнее</button>
+                    </form>
+                </td>
+                <td>
+                    <form id="@spare.SparePartId" action="~/Cart/CartIndex" method="post">
+                        <input type="hidden" name="sparePartId" value="@spare.SparePartId" />
+                        <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+                        <button type="submit">В корзину</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/lib/tablesort-gh-pages/dist/tablesort.min.js"></script>
+
+<!-- Include sort types you need -->
+<script src="~/lib/tablesort-gh-pages/src/sorts/tablesort.number.js"></script>
+<script src="~/lib/tablesort-gh-pages/src/sorts/tablesort.date.js"></script>
+
+<script>
+    new Tablesort(document.getElementById("selectedColumn"));
+</script>

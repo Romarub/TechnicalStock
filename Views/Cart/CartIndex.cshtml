@@ -1,0 +1,28 @@
+﻿@model Cart 
+<h2>Корзина</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Название детали</th>
+            <th>Количество</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var line in Model.Lines)
+        {
+            <tr>
+                <td>@line.SparePart.Name</td>
+                <td>@line.Quantity</td>
+                <td>
+                    <form action="~/Cart/RemoveItemFromCart" method="post">
+                        <input type="hidden" name="sparePartId" value="@line.SparePart.SparePartId" />
+                        <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
+                        <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div><a class="button" href="@ViewData["returnUrl"]">Вернуться к списку деталей</a></div>
