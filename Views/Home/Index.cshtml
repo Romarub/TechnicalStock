@@ -1,36 +1,41 @@
-﻿@model IQueryable<SparePart>
+﻿@model TechnicalStock.Models.ViewModels.ProductsFromCurrentCartAndStock
 
 <link href="~/lib/tablesort-gh-pages/tablesort.css" rel="stylesheet"/>
 <table id="selectedColumn" class="table table-bordered table-hover ">
-    <thead>
+    <thead class="thead-light">
         <tr>
             <th scope="col">Номер по складу №</th>
             <th scope="col">Название детали</th>
             <th scope="col">Описание</th>
             <th scope="col">Количество</th>
             <th scope="col">Тренажер</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var spare in Model)
+        @foreach (var spare in Model.StockSpares)
         {
-            <tr>
+            <tr ondblclick="document.location.href=('/Home/Details/' + '@spare.SparePartId')">
                 <td>@spare.SparePartId</td>
                 <td>@spare.Name</td>
                 <td>@spare.Description</td>
                 <td>@spare.Quantity</td>
                 <td>@spare.Simulator</td>
                 <td>
-                    <form action="~/Home/Details/@spare.SparePartId" target="_parent">
-                        <button type="submit">Подробнее</button>
-                    </form>
-                </td>
-                <td>
-                    <form id="@spare.SparePartId" action="~/Cart/CartIndex" method="post">
+                    @if (spare.Quantity > 0) {
+                    <form id="@spare.SparePartId" action="~/Cart/CartIndex" method="post" onsubmit="SubForm(event, this.id)">
                         <input type="hidden" name="sparePartId" value="@spare.SparePartId" />
                         <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
-                        <button type="submit">В корзину</button>
+                        @if (Model.CartSpares.Where(s => s.SparePartId == spare.SparePartId).Count() == 0)
+                        {
+                            <button id="cart_btn_@spare.SparePartId" type="submit" class="btn btn-primary">В корзину</button>
+                        }
+                        else
+                        {
+                            <button id="cart_btn_@spare.SparePartId" type="submit" class="btn btn-success" disabled="disabled">В корзине</button>
+                        }
                     </form>
+                    }
                 </td>
             </tr>
         }
@@ -43,6 +48,35 @@
 <script src="~/lib/tablesort-gh-pages/src/sorts/tablesort.number.js"></script>
 <script src="~/lib/tablesort-gh-pages/src/sorts/tablesort.date.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+
+
 <script>
+
     new Tablesort(document.getElementById("selectedColumn"));
+
+    function isClicked(id) {
+        let button = document.getElementById(id);
+        button.className = "btn btn-success";
+        button.innerHTML = "В корзине";
+        button.setAttribute("disabled", "disabled");
+    }
+
+    function SubForm(event, id) {
+        event.preventDefault();
+        $.ajax({
+            url: '/Cart/CartIndex',
+            type: 'post',
+            data: $('#' + id).serialize(),
+            success: function () {
+                isClicked('cart_btn_' + id);
+                UpdateCartSummary();
+            }
+        });
+        
+    }
+
+
 </script>

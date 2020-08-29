@@ -8,6 +8,8 @@ namespace TechnicalStock.Models
     public interface IStockRepository
     {
         IQueryable<SparePart> SpareParts { get; }
-        public void AddNewItem(SparePart newPart);
+        public void AddNewItem(SparePart sparePart);
+        public void RemoveItem(SparePart sparePart);
+        public void UpdateItem(SparePart sparePart);
     }
 }

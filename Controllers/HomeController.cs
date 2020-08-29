@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using SportsStore.Infrastructure;
+using TechnicalStock.Models.ViewModels;
 using TechnicalStock.Models;
 
 namespace TechnicalStock.Controllers
@@ -14,22 +14,33 @@ namespace TechnicalStock.Controllers
     public class HomeController : Controller
     {
         private IStockRepository repository;
-
+        public Cart ShoppingCart { get; set; }
 
         public HomeController(IStockRepository repo, Cart cartService)
         {
             repository = repo;
-           
+            ShoppingCart = cartService;
         }
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(string searchString)
         {
-            return View(repository.SpareParts);
+            ProductsFromCurrentCartAndStock viewResult = new ProductsFromCurrentCartAndStock();
+            viewResult.CartSpares = ShoppingCart.Lines.Select(line => line.SparePart).ToList();
+            viewResult.StockSpares = repository.SpareParts;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                viewResult.StockSpares = viewResult.StockSpares.Where(s => s.Name.Contains(searchString));// || s.Description.Contains(searchString));
+            }
+            return View(viewResult);
         }
+
         //Для страницы с детальной информацией о выбранной зап. части
         public IActionResult Details(int id)
         {
-            SparePart sparePart = repository.SpareParts.FirstOrDefault(spare => spare.SparePartId == id);
-            return View(sparePart);
+            ProductsFromCurrentCartAndStock viewResult = new ProductsFromCurrentCartAndStock();
+            viewResult.CartSpares = ShoppingCart.Lines.Select(line => line.SparePart).ToList();
+            viewResult.StockSpares = repository.SpareParts.Where(spare => spare.SparePartId == id);
+            return View(viewResult);
         }
         [HttpGet]
         public IActionResult Create()
@@ -38,9 +49,13 @@ namespace TechnicalStock.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(string name, string description, int quantity, string simulator)
+        public IActionResult Create(string name, string description, int quantity, string[] simulator)
         {
-            SparePart newPart = new SparePart { Name = name, Description = description, Quantity = quantity, Simulator = simulator };
+            SparePart newPart = new SparePart { 
+                Name = name, 
+                Description = description, 
+                Quantity = quantity, 
+                Simulator = string.Join(", ", simulator)};
             repository.AddNewItem(newPart);
             return View();//TODO: выводить сообщение об успехе добавления
         }

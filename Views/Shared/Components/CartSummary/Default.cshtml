@@ -1,26 +1,21 @@
 ﻿@model Cart
-    <div class="">
-        @if (Model.Lines.Count() > 0)
-        {
-        <small class="navbar-text">
-            <b>В корзине:</b>
-            @{
-                int qty = Model.Lines.Sum(x => x.Quantity);
-                @:@qty
-                if (qty == 1)
-                {
-                    @:позиция
-                }
-                else if (qty > 1 && qty < 5)
-                {
-                    @: позиции
-                }
-                else
-                {
-                    @: позиций
-                }
-            }
-        </small>
-        }
-        <a href="~/Cart/CartIndex" style="color:white; font-size:30px"><i class="fa fa-shopping-cart"></i></a>
-    </div>
+
+<a class="nav-link" href="~/Cart/CartIndex" style="font-size:30px;">
+    <i class="fa fa-shopping-cart"></i>
+    <span id="cart-widget-qty" class="cart-basket d-flex align-items-center justify-content-center bg-warning">
+        @Model.Lines.Sum(l => l.Quantity)
+    </span>
+</a>
+
+<script>
+    //closure function для обновления счетчика товаров в корзине без обновления страницы
+    // вот тут описание https://www.w3schools.com/js/js_function_closures.asp
+    var addCounter = (function () {
+        var counter = @Model.Lines.Sum(l => l.Quantity);
+        return function (incr) { counter += incr; return counter }
+    })();
+
+    function UpdateCartSummary(incr = 1) {
+        $("#cart-widget-qty").text(addCounter(incr));
+    }
+</script>

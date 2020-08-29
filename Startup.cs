@@ -25,6 +25,7 @@ namespace TechnicalStock
                 Configuration["ConnectionStrings:TechnicalStockConnection"]);
             });
             services.AddScoped<IStockRepository, EFStockRepository>();
+            services.AddScoped<IOrderRepository, EFOrderRepository>();
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));

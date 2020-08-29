@@ -11,5 +11,6 @@ namespace TechnicalStock.Models
         public StockDBContext(DbContextOptions<StockDBContext> options)
             : base(options) { }
         public DbSet<SparePart> SpareParts { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

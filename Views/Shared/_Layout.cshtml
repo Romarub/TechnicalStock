@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -7,19 +6,51 @@
     <title>@ViewBag.Title</title>
     <link href="/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/lib/custom/custom-styles.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 </head>
 <body>
+    <div class="navbar bg-info navbar-dark menu navbar-expand">
+        <ul class="navbar-nav flex-row">
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Index" style="font-size: 1.2rem;">Склад</a>
+            </li>
+            <li class="nav-item ml-3">
+                <a class="nav-link text-nowrap" href="~/Home/Create" style="font-size: 1.2rem;">Добавить деталь</a>
+            </li>
+        </ul>
 
-    <div class="bg-primary text-white p-2">
-        <span class="navbar-brand ml-2"><a href="~/Home" style="color:white">Склад</a></span>
-        <span class="navbar-brand ml-2"><a href="~/Home/Create" style="color:white">Добавить деталь</a></span>
-        <span style="float:right; margin-right:20px;">
-        <vc:cart-summary />
-        </span>
+        <ul class="navbar-nav ml-auto menu flex-row">
+            <li class="nav-item ml-auto">
+                <vc:cart-summary />
+            </li>
+        </ul>
+    </div>
+    <div class="container-fluid my-2 mx-1">
+        <form asp-controller="home" asp-action="index" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control border-info" placeholder="Поиск по складу..." name="searchstring">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </form>
     </div>
     <div>
         @RenderBody()
     </div>
 </body>
 </html>
- 
+
+<script>
+    //подсветка пунктов navbar'a
+    $(function () {
+        $('.menu a').each(function () {
+            var location = window.location.href;
+            var link = this.href;
+            if (location == link) {
+                $(this).addClass('active');
+            }
+        });
+    });
+</script>

@@ -1,6 +1,89 @@
-﻿@model SparePart
+﻿@model TechnicalStock.Models.ViewModels.ProductsFromCurrentCartAndStock
 
-<h3>@Model.Name</h3>
-<p>Описание: @Model.Description</p>
-<p>Остаток на складе: @Model.Quantity</p>
-<p>Используется на тренажерах типа: @Model.Simulator</p>
+
+<div class="container">
+
+    <div class="card border-info">
+        <div class="row">
+            <aside class="col-sm-5 border-right border-info">
+                <article class="gallery-wrap">
+                    <div class="img-big-wrap">
+                        <div> <a href="#"><img src="" alt="Изображение отсутствует"></a></div>
+                    </div> <!-- slider-product.// -->
+                    <div class="img-small-wrap">
+                        <div class="item-gallery"> <img src="" alt="Изображение отсутствует"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg" alt="Изображение отсутствует"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg" alt="Изображение отсутствует"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg" alt="Изображение отсутствует"> </div>
+                    </div> <!-- slider-nav.// -->
+                </article> <!-- gallery-wrap .end// -->
+            </aside>
+            <aside class="col-sm-7">
+                <article class="card-body p-5">
+                    <h3 class="title mb-3">@Model.StockSpares.First().Name</h3>
+                    <dl class="item-property">
+                        <dt>Описание:</dt>
+                        <dd>
+                            <p>
+                                @Model.StockSpares.First().Description
+                            </p>
+                        </dd>
+                    </dl>
+                    <dl class="param param-feature">
+                        <dt>Остаток на складе:</dt>
+                        <dd>@Model.StockSpares.First().Quantity</dd>
+                    </dl>  <!-- item-property-hor .// -->
+                    <dl class="param param-feature">
+                        <dt>Используется на тренажерах типа:</dt>
+                        <dd>@Model.StockSpares.First().Simulator</dd>
+                    </dl>  <!-- item-property-hor .// -->
+
+                    <hr class="border-info">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <dl class="param param-inline">
+                                <dt>Необходимое количество: </dt>
+                                <dd>
+                                    <input id="part_qty" name="qty" form="@Model.StockSpares.First().SparePartId" class="form-control border-info" style="width:70px" type="number" value="1" min="1" max="@Model.StockSpares.First().Quantity" step="1" />
+                                </dd>
+                            </dl>  <!-- item-property .// -->
+                        </div> <!-- col.// -->
+                    </div> <!-- row.// -->
+                    <hr class="border-info">
+                    <form id="@Model.StockSpares.First().SparePartId" asp-controller="Cart" asp-action="CartIndex" method="post" onsubmit="SubForm(event, this.id)">
+                        <input type="hidden" name="sparePartId" value="@Model.StockSpares.First().SparePartId" />
+                        <button class="btn btn-lg btn-outline-info" type="submit"> <i class="fas fa-shopping-cart"></i> В корзину</button>
+                    </form>
+                </article> <!-- card-body.// -->
+            </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+    </div> <!-- card.// -->
+
+
+</div>
+<!--container.//-->
+
+<script>
+
+    function isClicked(id) {
+        let button = document.getElementById(id);
+        button.className = "btn btn-lg btn-success disabled";
+        button.innerHTML = '<i class="fas fa-shopping-cart"></i>' + " В корзине";
+    }
+
+    function SubForm(event, id) {
+        event.preventDefault();
+        $.ajax({
+            url: '/Cart/CartIndex',
+            type: 'post',
+            data: $('#' + id).serialize(),
+            success: function () {
+                isClicked(id);
+                let qty = Number($("#part_qty").val());
+                UpdateCartSummary(qty);
+            }
+        });
+
+    }
+
+</script>

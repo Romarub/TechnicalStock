@@ -25,4 +25,9 @@
     </tbody>
 </table>
 
-<div><a class="button" href="@ViewData["returnUrl"]">Вернуться к списку деталей</a></div>
+<div>
+    <a class="button" href="@ViewData["returnUrl"]">Вернуться к списку деталей</a>
+    <form asp-controller="order" asp-action="checkout" method="post">
+        <input type="submit" value="Взять со склада"/>
+    </form>
+</div>

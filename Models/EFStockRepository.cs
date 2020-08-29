@@ -19,5 +19,17 @@ namespace TechnicalStock.Models
             context.SpareParts.Add(newPart);
             context.SaveChanges();
         }
+
+        public void RemoveItem(SparePart sparePart)
+        {
+            context.SpareParts.Remove(sparePart);
+            context.SaveChanges();
+        }
+
+        public void UpdateItem(SparePart sparePart)
+        {
+            context.SpareParts.Update(sparePart);
+            context.SaveChanges();
+        }
     }
 }

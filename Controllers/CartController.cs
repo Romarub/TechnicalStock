@@ -20,6 +20,8 @@ namespace TechnicalStock.Controllers
         public string ReturnUrl { get; set; }
         public Cart ShoppingCart { get; set; }
 
+
+
         [HttpGet]
         public IActionResult CartIndex(string returnUrl)
         {
@@ -29,11 +31,12 @@ namespace TechnicalStock.Controllers
         }
 
         [HttpPost]
-        public IActionResult CartIndex(int sparePartId, string returnUrl)
+        public IActionResult CartIndex(int sparePartId, string returnUrl, int qty = 1)
         {
             SparePart sparePart = repository.SpareParts.FirstOrDefault(p => p.SparePartId == sparePartId);
-            ShoppingCart.AddItem(sparePart, 1);
-            return RedirectToPage(returnUrl);
+            ShoppingCart.AddItem(sparePart, qty);
+            return RedirectToActionPermanent("Index", "Home");
+            //return RedirectToPage(returnUrl);
         }
 
         [HttpPost]

@@ -1,0 +1,12 @@
+﻿
+/*кол-во товаров в корзине(кружок)*/
+.cart-basket {
+    font-size: .6rem;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 15px;
+    height: 15px;
+    color: white;
+    border-radius: 50%;
+}
